@@ -10,10 +10,12 @@ class Connexion :
         cls.bdd = mysql.connect(user='root', password='root', host='localhost', port="8081", database='breizhibus')
         cls.cursor = cls.bdd.cursor()
 
+
     @classmethod
     def fermer_connexion(cls):
         cls.cursor.close()
         cls.bdd.close()
+
 
     @classmethod
     def lister_lignes(cls):
@@ -43,41 +45,35 @@ class Connexion :
         cls.fermer_connexion()
         return arret_liste
 
-
-
-
-
-#exemple de code pour info
-    """
     @classmethod
-    def maj_apprenants(cls, mails):
+    def lister_bus(cls, ligne):
         cls.ouvrir_connexion()
-        promo = {}
+        bus_liste=[]
+        get_query=f"SELECT numero FROM bus JOIN ligne ON bus.id_ligne = ligne.id_ligne WHERE ligne.nom = '{ligne}';"
+        cls.cursor.execute(get_query)
 
-        query="SELECT id_personne, nom, prenom, mail FROM personnes"
-        cls.cursor.execute(query)
-        
-        for (id_personne, nom, prenom, mail) in cls.cursor :
-            apprenant = Apprenant(id_personne, mail, prenom, nom)
-            promo[nom] = apprenant
-
-        for mail in mails :
-            nom_mail = mail.split(".")
-            
-            if len(nom_mail) > 1 :
-                debut_nom = nom_mail[1]
-                debut_nom = debut_nom[:4].lower().replace("-", " ")
-                for cle, apprenant in promo.items():
-                    debut_cle = cle[:4].lower()
-                    
-                    if debut_nom == debut_cle:
-                        apprenant.adresse = mail
-
-        for apprenant in promo.values():
-            print(apprenant.adresse, apprenant.id)
-            cls.cursor.execute("UPDATE personnes SET mail = %s WHERE id_personne = %s", (apprenant.adresse, apprenant.id))
-            cls.bdd.commit()
-
-
+        for row in cls.cursor:
+            bus_liste.append(row)
         cls.fermer_connexion()
-        print("fin de la mise à jour")"""
+        return bus_liste
+
+    @classmethod
+    def ajouter_bus(cls, ligne, immat, nb_places, numero):
+        
+        cls.ouvrir_connexion()
+        cls.cursor.execute(f"INSERT INTO bus ( id_ligne, immatriculation, nombre_places, numero) VALUES ((SELECT id_ligne from ligne WHERE nom = '{ligne}' ), '{immat}', '{nb_places}', '{numero}' )")
+         
+        cls.bdd.commit()
+        cls.fermer_connexion()
+
+
+    @classmethod
+    def nom_lignes(cls):
+        cls.ouvrir_connexion()
+        ligne_liste=[]
+        get_query="Select nom from ligne"
+        cls.cursor.execute(get_query)
+        for row in cls.cursor:
+            ligne_liste.append(row)
+        cls.fermer_connexion()
+        return ligne_liste
