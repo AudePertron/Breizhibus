@@ -2,7 +2,7 @@
 import mysql.connector as mysql
 from lignes import Ligne
 from arrets import Arret
-
+from bus import Bus
 
 class Connexion :
     @classmethod
@@ -77,3 +77,21 @@ class Connexion :
             ligne_liste.append(row)
         cls.fermer_connexion()
         return ligne_liste
+
+    @classmethod
+    def get_bus(cls):
+        cls.ouvrir_connexion()
+        bus_details=[]
+        get_query="Select * from bus"
+        cls.cursor.execute(get_query)
+
+        for row in cls.cursor:
+            bus = Bus(row[0], row[1], row[2], row[3], row[4])
+        cls.fermer_connexion()
+        return bus
+
+    @classmethod
+    def update_bus(cls, bus):
+        cls.ouvrir_connexion()
+        update_query="UPDATE bus " ##### FAIRE LA QUERY
+        cls.cursor.execute(update_query)

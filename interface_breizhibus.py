@@ -154,3 +154,42 @@ class Interface:
             'Helvetica', '11'), text="Valider", command=inserer)
         bt_valider.grid(row=2, columnspan=5, padx=20, pady=10)
 
+# Il faut aussi pouvoir les modifier et les supprimer
+
+ def modif_bus(self):
+        for widget in self.frame_menu.winfo_children():
+            widget.pack_forget()
+
+        display_frame = tk.Frame(self.frame_menu, bg=colors['orange'])
+        display_frame.pack()
+
+        def inserer():
+            Connexion.ajouter_bus(ligne_liste.get(), entree_immat.get(), entree_places.get(), entree_numero.get() )# remplacer par leurs .get respectifs
+            self.saisir_bus()
+
+        for i, text in enumerate(['Ligne', 'Immatriculation', 'Places', 'Numero']):
+            label = tk.Label(display_frame, text=text,  bg=colors['orange'], font=(
+                'Helvetica', '12', 'underline'))
+            label.grid(row=0, column=i)
+
+
+        ligne_liste = ttk.Combobox(display_frame, width=20, values=list(
+            Connexion.nom_lignes()), state="readonly")
+        ligne_liste.set('Chosir une ligne')
+        ligne_liste.grid(row=1, column=0, padx=10, pady=15)
+
+        entree_immat = tk.Entry(
+            display_frame, bg='white', width=20, justify='center', font=('', '9'))
+        entree_immat.grid(row=1, column=1, padx=10, pady=15)
+
+        entree_places = tk.Entry(display_frame, bg='white',
+                                width=20, justify='center', font=('', '9'))
+        entree_places.grid(row=1, column=2, padx=10, pady=15)
+
+        entree_numero = tk.Entry(display_frame, bg='white',
+                                width=20, justify='center', font=('', '9'))
+        entree_numero.grid(row=1, column=3, padx=10, pady=15)
+
+        bt_valider = tk.Button(display_frame, height=2, width=13, bg=colors['noir'], fg=colors['blanc'], bd=0, font=(
+            'Helvetica', '11'), text="Valider", command=inserer)
+        bt_valider.grid(row=2, columnspan=5, padx=20, pady=10)
