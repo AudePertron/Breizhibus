@@ -9,15 +9,15 @@ le fichier breizhi.pi lance le permier jet (basé sur le premier brief) en versi
 L'interface possède 4 boutons.
 
 ### Afficher Lignes
-![accueil interface](Images/afficher_lignes.png)
+![afficher lignes](Images/afficher_lignes.png)
 
 ### Arrêts
-![accueil interface](Images/arrets.jpg)
+![arrets](Images/arrets.jpg)
 
 ### Ajouter bus
-![accueil interface](Images/ajouter_bus.jpg)
+![ajouter bus](Images/ajouter_bus.jpg)
 
-### et ainsi de suite
+ et ainsi de suite
 
 ## Les choix techniques
 
