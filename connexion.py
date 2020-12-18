@@ -77,21 +77,34 @@ class Connexion :
             ligne_liste.append(row)
         cls.fermer_connexion()
         return ligne_liste
-
+    
     @classmethod
-    def get_bus(cls):
+    def num_bus(cls):
         cls.ouvrir_connexion()
-        bus_details=[]
-        get_query="Select * from bus"
+        num_liste=[]
+        get_query="Select numero from bus"
         cls.cursor.execute(get_query)
-
         for row in cls.cursor:
-            bus = Bus(row[0], row[1], row[2], row[3], row[4])
+            num_liste.append(row)
         cls.fermer_connexion()
-        return bus
+        return num_liste
 
-    @classmethod
+
+    @classmethod #récupérer infos bus
+    def get_bus(cls, numero):
+        cls.ouvrir_connexion()
+        get_query="Select * from bus WHERE numero = '{numero}' "
+        cls.cursor.execute(get_query)
+        busr=Bus(1,2,3,4,5)
+        for row in cls.cursor:
+            busr = Bus(row[0], row[1], row[2], row[3], row[4])
+        cls.fermer_connexion()
+        return busr()
+
+    @classmethod #modifier un bus
     def update_bus(cls, bus):
         cls.ouvrir_connexion()
-        update_query="UPDATE bus " ##### FAIRE LA QUERY
+        update_query="UPDATE bus SET (id_ligne, immatriculation, nombre_places, numero) VALUES ('{bus.ligne}', '{bus.immat}', '{bus.nb_places}', '{bus.numero}' ) WHERE id_bus = {bus.id} "
         cls.cursor.execute(update_query)
+        cls.bdd.commit()
+        cls.fermer_connexion()

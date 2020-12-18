@@ -1,4 +1,3 @@
-from connexion import Connexion
 class Bus:
     def __init__(self, *infos):
         self.id = infos[0]

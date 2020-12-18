@@ -43,7 +43,8 @@ class Interface:
         #fonction d'ajout de bouton
         fonctions = {'Afficher les lignes de bus': self.afficher_lignes,
                     "Voir les arrêts d'une ligne": self.afficher_arrets,
-                    "Ajouter un nouveau bus" : self.saisir_bus}
+                    "Ajouter un nouveau bus" : self.saisir_bus,
+                    "Modifier un bus " : self.afficher_bus}
 
         for i, (key, value) in enumerate(fonctions.items()):
             ligne = tk.Button(self.frame_boutons, height=2, width=22, bg=colors['orange'], bd=0, font=(
@@ -109,7 +110,7 @@ class Interface:
 
         #liste lignes
         self.ligne_liste = ttk.Combobox(arrets_frame, width=20, values=list(Connexion.lister_lignes()), state="readonly")
-        self.ligne_liste.set('Chosir une ligne')
+        self.ligne_liste.set('Choisir une ligne')
         self.ligne_liste.bind('<<ComboboxSelected>>', self.afficher)
         self.ligne_liste.grid(row=1, column=1, padx=10, pady=15)
 
@@ -135,7 +136,7 @@ class Interface:
 
         ligne_liste = ttk.Combobox(display_frame, width=20, values=list(
             Connexion.nom_lignes()), state="readonly")
-        ligne_liste.set('Chosir une ligne')
+        ligne_liste.set('Choisir une ligne')
         ligne_liste.grid(row=1, column=0, padx=10, pady=15)
 
         entree_immat = tk.Entry(
@@ -156,7 +157,7 @@ class Interface:
 
 # Il faut aussi pouvoir les modifier et les supprimer
 
- def modif_bus(self):
+    def modif_bus(self, numero):
         for widget in self.frame_menu.winfo_children():
             widget.pack_forget()
 
@@ -164,32 +165,47 @@ class Interface:
         display_frame.pack()
 
         def inserer():
-            Connexion.ajouter_bus(ligne_liste.get(), entree_immat.get(), entree_places.get(), entree_numero.get() )# remplacer par leurs .get respectifs
-            self.saisir_bus()
+            Connexion.update_bus(ligne_liste.get(), entree_immat.get(), entree_places.get(), entree_numero.get() )# remplacer par leurs .get respectifs
+            self.modif_bus()
 
-        for i, text in enumerate(['Ligne', 'Immatriculation', 'Places', 'Numero']):
+        self.bus = Connexion.get_bus(numero)
+
+        for i, text in enumerate(['Numero', 'Ligne', 'Immatriculation', 'Places' ]):
             label = tk.Label(display_frame, text=text,  bg=colors['orange'], font=(
                 'Helvetica', '12', 'underline'))
             label.grid(row=0, column=i)
 
-
         ligne_liste = ttk.Combobox(display_frame, width=20, values=list(
             Connexion.nom_lignes()), state="readonly")
-        ligne_liste.set('Chosir une ligne')
-        ligne_liste.grid(row=1, column=0, padx=10, pady=15)
+        ligne_liste.set('Choisir une ligne')
+        ligne_liste.grid(row=1, column=1, padx=10, pady=15)
 
         entree_immat = tk.Entry(
             display_frame, bg='white', width=20, justify='center', font=('', '9'))
-        entree_immat.grid(row=1, column=1, padx=10, pady=15)
+        entree_immat.insert(0, self.bus.immat)
+        entree_immat.grid(row=1, column=2, padx=10, pady=15)
+        
 
         entree_places = tk.Entry(display_frame, bg='white',
                                 width=20, justify='center', font=('', '9'))
-        entree_places.grid(row=1, column=2, padx=10, pady=15)
-
-        entree_numero = tk.Entry(display_frame, bg='white',
-                                width=20, justify='center', font=('', '9'))
-        entree_numero.grid(row=1, column=3, padx=10, pady=15)
+        entree_places.insert(0, self.bus.nb_places)
+        entree_places.grid(row=1, column=3, padx=10, pady=15)
 
         bt_valider = tk.Button(display_frame, height=2, width=13, bg=colors['noir'], fg=colors['blanc'], bd=0, font=(
             'Helvetica', '11'), text="Valider", command=inserer)
         bt_valider.grid(row=2, columnspan=5, padx=20, pady=10)
+
+
+    def afficher_bus(self):          #affiche le bouton de choix de ligne
+        for widget in self.frame_menu.winfo_children():
+            widget.pack_forget()
+
+        bus_frame = tk.Frame(self.frame_menu, bg=colors['orange'])
+        bus_frame.pack()
+
+        #liste lignes
+        self.entree_numero = ttk.Combobox(bus_frame, width=20, values=list(Connexion.num_bus()), state="readonly")
+        self.entree_numero.set('Choisir un bus')
+        self.entree_numero.bind('<<ComboboxSelected>>', self.modif_bus)
+        self.entree_numero.grid(row=1, column=1, padx=10, pady=15)
+
