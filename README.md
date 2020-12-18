@@ -25,6 +25,9 @@ Plusieurs fichiers fonction, un fichier connexion qui gère les connexions et re
 
 La programmation est réalisé principalement en classes/méthodes, je trouve ce système plus performant.
 L'interface graphique est réalisée avec tkinter, que je trouve (avec un peu de pratique) relativement facile à utiliser.
+Pour l'interface, j'ai utilisé le `widget.pack_forget()` qui permet "d'effacer" le widget précédent. (une façon de rafraichir la fenêtre).
+Le résultat des boutons est affiché sur un frame différent du reste, ce qui permet de garder l'affichage des boutons de "menu" en haut de l'écran
+
 
 ## Les difficultés rencontrées
 
